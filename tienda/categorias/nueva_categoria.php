@@ -19,6 +19,11 @@
             exit;
         } */
     ?>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
 </head>
 <body>
     <?php

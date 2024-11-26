@@ -19,6 +19,11 @@
             exit;
         } */
     ?>
+    <style>
+        .error {
+            color: red;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -27,7 +32,7 @@
         <?php
             if($_SERVER["REQUEST_METHOD"] == "POST") {
                 $categoria = $_POST["categoria"];
-                echo "<h1>$categoria</h1>";
+                /* echo "<h1>$categoria</h1>"; */
                 //  borrar el anime
                 $sql = "DELETE FROM categorias WHERE categoria = '$categoria'";
                 $_conexion -> query($sql);
@@ -61,7 +66,7 @@
                         ?>
                         <td>
                             <a class="btn btn-primary" 
-                               href="ver_anime.php?categoria=<?php echo $fila["categoria"] ?>">Editar</a>
+                               href="editar_categoria.php?categoria=<?php echo $fila["categoria"] ?>">Editar</a>
                         </td>
                         <td>
                             <form action="" method="post">
