@@ -23,13 +23,13 @@
 <body>
     <div class="container">
         <a class="btn btn-warning" href="usuario/cerrar_sesion.php">Cerrar sesión</a>
-        <h1>Tabla de animes</h1>
+        <h1>Tabla de Categorías</h1>
         <?php
             if($_SERVER["REQUEST_METHOD"] == "POST") {
                 $categoria = $_POST["categoria"];
                 echo "<h1>$categoria</h1>";
                 //  borrar el anime
-                $sql = "DELETE FROM categorias WHERE categoria = $categoria";
+                $sql = "DELETE FROM categorias WHERE categoria = '$categoria'";
                 $_conexion -> query($sql);
             }
 
