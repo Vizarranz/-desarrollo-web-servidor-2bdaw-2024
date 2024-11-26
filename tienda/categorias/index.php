@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Index de Animes</title>
+    <title>Tienda</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <?php
         error_reporting( E_ALL );
-        ini_set("display_errors", 1 );
+        ini_set("display_errors", 1 );    
 
-        require('conexion.php');
+        require('../util/conexion.php');
 
-        session_start();
+        /* session_start();
         if(isset($_SESSION["usuario"])) {
             echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
         }else{
             header("location: usuario/iniciar_sesion.php");
             exit;
-        }
+        } */
     ?>
 </head>
 <body>
@@ -26,14 +26,14 @@
         <h1>Tabla de animes</h1>
         <?php
             if($_SERVER["REQUEST_METHOD"] == "POST") {
-                $id_anime = $_POST["id_anime"];
-                echo "<h1>$id_anime</h1>";
+                $categoria = $_POST["categoria"];
+                echo "<h1>$categoria</h1>";
                 //  borrar el anime
-                $sql = "DELETE FROM animes WHERE id_anime = $id_anime";
+                $sql = "DELETE FROM categorias WHERE categoria = $categoria";
                 $_conexion -> query($sql);
             }
 
-            $sql = "SELECT * FROM animes";
+            $sql = "SELECT * FROM categorias";
             $resultado = $_conexion -> query($sql);
             /**
              * Aplicamos la función query a la conexión, donde se ejecuta la sentencia SQL hecha
@@ -42,15 +42,12 @@
              * a los arrays
              */
         ?>
-        <a class="btn btn-secondary" href="nuevo_anime.php">Crear nuevo anime</a><br><br>
+        <a class="btn btn-secondary" href="nueva_categoria.php">Crear nueva categoría</a><br><br>
         <table class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
-                    <th>Título</th>
-                    <th>Estudio</th>
-                    <th>Año</th>
-                    <th>Número de temporadas</th>
-                    <th>Imagen</th>
+                    <th>Categorías</th>
+                    <th>Descripción</th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -59,21 +56,16 @@
                 <?php
                     while($fila = $resultado -> fetch_assoc()) {    // trata el resultado como un array asociativo
                         echo "<tr>";
-                        echo "<td>" . $fila["titulo"] . "</td>";
-                        echo "<td>" . $fila["nombre_estudio"] . "</td>";
-                        echo "<td>" . $fila["anno_estreno"] . "</td>";
-                        echo "<td>" . $fila["num_temporadas"] . "</td>"; 
+                        echo "<td>" . $fila["categoria"] . "</td>";
+                        echo "<td>" . $fila["descripcion"] . "</td>";
                         ?>
                         <td>
-                            <img width="100" height="200" src="<?php echo $fila["imagen"] ?>">
-                        </td>
-                        <td>
                             <a class="btn btn-primary" 
-                               href="ver_anime.php?id_anime=<?php echo $fila["id_anime"] ?>">Editar</a>
+                               href="ver_anime.php?categoria=<?php echo $fila["categoria"] ?>">Editar</a>
                         </td>
                         <td>
                             <form action="" method="post">
-                                <input type="hidden" name="id_anime" value="<?php echo $fila["id_anime"] ?>">
+                                <input type="hidden" name="categoria" value="<?php echo $fila["categoria"] ?>">
                                 <input class="btn btn-danger" type="submit" value="Borrar">
                             </form>
                         </td>
