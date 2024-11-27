@@ -42,20 +42,32 @@
             $tmp_categoria = depurar($_POST["categoria"]);
             $tmp_descripcion = depurar($_POST["descripcion"]);
 
+            $sql = "SELECT * FROM categorias WHERE categoria = '$tmp_categoria'";
+            $resultado = $_conexion -> query($sql);
+
             if($tmp_categoria == '') {
                 $err_categoria = "La categoría es obligatoria";
-            } else {
-                if(strlen($tmp_categoria) > 30) {
-                    $err_categoria = "La categoría debe tener máximo 30 caracteres";
+            }
+            else{
+                if($resultado -> num_rows != 0) {
+                    echo "<h2>La categoría $tmp_categoria ya existe</h2>";
                 } else {
-                    $categoria = $tmp_categoria;
-                }
+                        //patrón que permite todos los caracteres alfanuméricos y espacios en blanco.
+                        $patron = "/^[a-zA-ZáéíóúÁÉÍÓÚäëïöüÄËÏÖÜñÑ ]{2,30}$/";
+                        if(!preg_match($patron, $tmp_categoria)) {
+                            $err_categoria = "La categoría debe tener máximo 30 caracteres";
+                        } else {
+                            $categoria = $tmp_categoria;
+                        }
+                    }
             }
 
             if($tmp_descripcion == '') {
-                $err_descripcion = "La descripción es obligatoria";
+                $descripcion = $tmp_descripcion;
             } else {
-                if(strlen($tmp_descripcion) > 255) {
+                //patrón que permite todos los caracteres entre 0 y 255 caracteres.
+                $patron = "/^.{0,255}$/";
+                if(!preg_match($patron, $tmp_categoria)) {
                     $err_descripcion = "La descripción debe tener máximo 255 caracteres";
                 } else {
                     $descripcion = $tmp_descripcion;
