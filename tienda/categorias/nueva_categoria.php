@@ -13,7 +13,7 @@
 
         session_start();
         if(isset($_SESSION["usuario"])) {
-            echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
+            echo "<h2>Sesión de: " . $_SESSION["usuario"] . "</h2>";
         }else{
             header("location: ../usuario/iniciar_sesion.php");
             exit;
@@ -50,12 +50,12 @@
             }
             else{
                 if($resultado -> num_rows != 0) {
-                    echo "<h2>La categoría $tmp_categoria ya existe</h2>";
+                    $err_categoria = "La categoría $tmp_categoria ya existe.";
                 } else {
                         //patrón que permite todos los caracteres alfanuméricos y espacios en blanco.
                         $patron = "/^[a-zA-ZáéíóúÁÉÍÓÚäëïöüÄËÏÖÜñÑ ]{2,30}$/";
                         if(!preg_match($patron, $tmp_categoria)) {
-                            $err_categoria = "La categoría debe tener máximo 30 caracteres";
+                            $err_categoria = "La categoría debe tener máximo 30 caracteres únicamente alfabéticos";
                         } else {
                             $categoria = $tmp_categoria;
                         }
