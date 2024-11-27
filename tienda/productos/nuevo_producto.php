@@ -16,7 +16,7 @@
         if(isset($_SESSION["usuario"])) {
             echo "<h2>Sesión de: " . $_SESSION["usuario"] . "</h2>";
         }else{
-            header("location: ../usuario/iniciar_sesion.php");
+            header("location: ../index.php");
             exit;
         }
     ?>
@@ -48,11 +48,11 @@
                 $tmp_categoria = depurar($_POST["categoria"]);
             }
             else {
-                $tmp_categoria = '';
+                $tmp_categoria = "";
             }
             $nombre_imagen = $_FILES["imagen"]["name"];
             $ubicacion_temporal = $_FILES["imagen"]["tmp_name"];
-            $ubicacion_final = "./imagenes/$nombre_imagen";
+            $ubicacion_final = "../imagenes/$nombre_imagen";
 
             move_uploaded_file($ubicacion_temporal, $ubicacion_final);
 
@@ -63,14 +63,14 @@
                 if($resultado -> num_rows != 0) {
                     $err_categoria = "La categoría $tmp_categoria ya existe.";
                 } else {
-                        //patrón que permite todos los caracteres alfanuméricos y espacios en blanco.
-                        $patron = "/^[a-zA-ZáéíóúÁÉÍÓÚäëïöüÄËÏÖÜñÑ ]{2,30}$/";
-                        if(!preg_match($patron, $tmp_categoria)) {
-                            $err_categoria = "La categoría debe tener máximo 30 caracteres únicamente alfabéticos";
-                        } else {
-                            $categoria = $tmp_categoria;
-                        }
+                    //patrón que permite todos los caracteres alfanuméricos y espacios en blanco.
+                    $patron = "/^[a-zA-ZáéíóúÁÉÍÓÚäëïöüÄËÏÖÜñÑ ]{2,30}$/";
+                    if(!preg_match($patron, $tmp_categoria)) {
+                        $err_categoria = "La categoría debe tener máximo 30 caracteres únicamente alfabéticos";
+                    } else {
+                        $categoria = $tmp_categoria;
                     }
+                }
             }
 
             if($tmp_descripcion == '') {
@@ -96,16 +96,39 @@
         //print_r($estudios);
  
         ?>
-        <form class="col-6" action="" method="post">
+        <form class="col-6" action="" method="post" enctype="multipart/form-data">
             <div class="mb-3">
-                <label class="form-label">Categoría</label>
-                <input class="form-control" type="text" placeholder="Electrónica III..." name="categoria">
-                <?php if(isset($err_categoria)) echo "<span class='error'>$err_categoria</span>" ?>
+                <label for="nombre" class="form-label">Nombre</label>
+                <input class="form-control" id="nombre" type="text" placeholder="Elige un nombre para tu producto" name="nombre">
+                <?php if(isset($err_nombre)) echo "<span class='error'>$err_nombre</span>" ?>
             </div>
             <div class="mb-3">
                 <label for="descripcion" class="form-label">Descripción</label><br>
-                <textarea name="descripcion" id="descripcion" placeholder="Cosas que hacen chispas..."></textarea>
+                <textarea name="descripcion" id="descripcion" placeholder="Esta es la descripción del producto"></textarea>
                 <?php if(isset($err_descripcion)) echo "<span class='error'>$err_descripcion</span>" ?>
+            </div>
+            <div class="mb-3">
+                <label for="precio" class="form-label">Precio</label><br>
+                <input type="number" name="precio" id="precio" placeholder="Precio en euros">
+                <?php if(isset($err_precio)) echo "<span class='error'>$err_precio</span>" ?>
+            </div>
+            <label for="categoria">Categoría</label><br>
+            <select name="categoria" id="categoria">
+                <option hidden selected disabled>--- Elija una categoría ---</option>
+                <?php
+                    foreach ($categorias as $categoria) {?>
+                        <option value="<?php echo $categoria ?>"><?php echo $categoria ?></option>
+                    <?php } ?>
+            </select>
+            <br><br>
+            <div class="mb-3">
+                <label for="stock" class="form-label">Stock</label><br>
+                <input type="number" name="stock" id="stock" placeholder="Cantidad del producto">
+                <?php if(isset($err_stock)) echo "<span class='error'>$err_stock</span>" ?>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Imagen</label>
+                <input class="form-control" type="file" name="imagen">
             </div>
             <div class="mb-3">
                 <input class="btn btn-primary" type="submit" value="Crear">
@@ -114,8 +137,10 @@
         </form>
     </div>
     <?php
+        //Insertamos los valores una vez se han validado todos los que eran necesarios.
         if (isset($nombre) && isset($precio) && isset($descripcion) && isset($categoria) && isset($ubicacion_final) ) {
-            $send = "SELECT * FROM categorias WHERE categoria = '$tmp_categoria'";
+            $send = "INSERT INTO productos (nombre, precio, categoria, stock, imagen, descripcion) 
+            VALUES ('$nombre'. $precio. '$categoria'. $stock. '$ubicacion_final'. '$descripcion');";
             $resultado = $_conexion -> query($send);
         }
     ?>
