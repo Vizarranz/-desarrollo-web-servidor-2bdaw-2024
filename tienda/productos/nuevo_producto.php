@@ -91,28 +91,33 @@
                 }
             }
 
-            /* Validación precio */
-            if ($tmp_precio == "") {
-                $err_precio = "El precio es obligatorio.";
-            } else {
+            /* Precio */
+
+            if ($tmp_precio == '') {
+                $err_precio = "El precio del producto es obligatorio.";
+            }
+            else{
                 if (!is_numeric($tmp_precio)) {
-                    $err_precio = "El precio debe ser numérico";
-                } else {
-                    if ($tmp_precio < 0 || $tmp_precio > 2147483647) {
-                        $err_precio = "El precio debe ser mayor a 0 y menor a 2.147.483.647.";
-                    } else {
-                        $patron_precio = "/^[0-9]{1,4}(\.[0-9]{1,2})?$/";
-                        if (!preg_match($patron_precio, $tmp_precio)) {
-                            $err_precio = "El rango de precio es de 0 hasta 9999.99";
-                        } else {
+                    $err_precio = "El precio debe ser un número.";
+                }
+                else {
+                    if ($tmp_precio < 0 || $tmp_precio > 9999.99) {
+                        $err_precio = "El valor debe comprenderse entre 0€ y 9999'99€.";
+                    }
+                    else {
+                        $patron = "/^[0-9]{1,4}(\.[0-9]{1,2})?$/";
+                        if (!preg_match($patron, $tmp_precio)) {
+                            $err_precio = "El precio debe tener el siguiente formato: XXXX'XX";
+                        }
+                        else {
                             $precio = $tmp_precio;
                         }
-                    }   
+                    }
                 }
+                    
             }
 
-
-            /* Validación categoria */
+            /* Categoría */
             if ($tmp_categoria == "") {
                 $err_categoria = "La categoría es ogligatoria.";
             } else {
