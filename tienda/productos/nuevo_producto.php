@@ -51,40 +51,45 @@
             $tmp_stock = depurar($_POST["stock"]);
             $tmp_descripcion = depurar($_POST["descripcion"]);
 
+            /* Validaciones */
 
-            /* Validación imagenes */
-            $nombre_img = $_FILES["imagen"]["name"];
-            $ubi_tmp_img = $_FILES["imagen"]["tmp_name"];
-            $type_img = $_FILES["imagen"]["type"];
-            
-            if (strlen($nombre_img) > 60) {
-                $err_imagen = "El nombre de la imagen no puede superar los 60 catacteres.";
-            } else {
-                $lista_extensiones = ["image/png", "image/jpg", "image/jpeg", "image/webp"];
-                if (!in_array($type_img, $lista_extensiones)) {
-                    $err_imagen = "La extensión de imagen no es admitida.";
-                } else {
-                    $ubi_final_img = "../imagenes/$nombre_img";
-                    move_uploaded_file($ubi_tmp_img, $ubi_final_img);
-                }
+            /* Nombre */
+            if ($tmp_nombre == '') {
+                $err_nombre = "Introduzca un nombre para el producto.";
             }
-
-            /* Validación nombre */
-            if ($tmp_nombre == "") {
-                $err_nombre = "El nombre es obligatorio.";
-            } else {
+            else {
                 if (strlen($tmp_nombre) < 2 || strlen($tmp_nombre) > 50) {
-                    $err_nombre = "El nombre tiene que tener entre 2 y 50 caracteres.";
-                } else {
-                    $patron_nombre = "/^[a-zA-Z0-9 ]+/";
-                    if (!preg_match($patron_nombre, $tmp_nombre)) {
-                        $err_nombre = "El nombre solo puede tener letras, números y espacios en blanco.";
-                    } else {
+                    $err_nombre = "El nombre debe contener entre 2 y 50 caracteres.";
+                }
+                else {
+                    $patron = "/^[a-zA-Z0-9 ]+/";
+                    if (!preg_match($patron, $tmp_nombre)) {
+                        $err_nombre = "El nombre sólo puede constar de caracteres alfanuméricos y espacios en blanco.";
+                    }
+                    else {
                         $nombre = $tmp_nombre;
                     }
                 }
             }
 
+            /* Imagen */
+            $nombre_imagen = $_FILES["imagen"]["name"];
+            $ubicacion_temporal = $_FILES["imagen"]["tmp_name"];
+            $tipo_imagen = $_FILES["imagen"]["type"];
+
+            if (strlen($nombre_imagen) > 60) {
+                $err_imagen = "El nombre de la imagen debe comprender entre 1 y 60 caracteres.";
+            }
+            else {
+                $formato_imagen = ["image/webp","image/png","image/jpeg","image/jpg","image/apng","image/svg"];
+                if (!in_array($tipo_imagen,$formato_imagen)) {
+                    $err_imagen = "El formato de imagen no se encuentra entre los soportados.";
+                }
+                else {
+                    $ubicacion_final = "../imagenes/$nombre_imagen";
+                    move_uploaded_file($ubicacion_temporal, $ubicacion_final);
+                }
+            }
 
             /* Validación precio */
             if ($tmp_precio == "") {
@@ -145,7 +150,7 @@
 
             /* Validación descripción */
             if ($tmp_descripcion == "") {
-                $descripcion = $tmp_descripcion;
+                $err_descripcion = "La descripción del producto es obligatoria.";
             } else {
                 if (strlen($tmp_descripcion) > 255) {
                     $err_descripcion = "La descripción debe tener un máximo del 255 caracteres.";
@@ -210,9 +215,9 @@
 
     <?php
         /* Enviar a la BBDD */
-        if (isset($nombre) && isset($precio) && isset($categoria) && isset($ubi_final_img)) {
+        if (isset($nombre) && isset($precio) && isset($categoria) && isset($ubicacion_final) && isset($descripcion)) {
             $enviar = "INSERT INTO productos (nombre, precio, categoria, stock, imagen, descripcion) 
-                VALUES ('$nombre', '$precio', '$categoria', '$stock', '$ubi_final_img', '$descripcion')";
+                VALUES ('$nombre', '$precio', '$categoria', '$stock', '$ubicacion_final', '$descripcion')";
             $_conexion -> query($enviar);
         }
     ?>

@@ -82,7 +82,6 @@
         while($fila = $resultado -> fetch_assoc()) {
             array_push($categorias, $fila["categoria"]);
         }
-        //print_r($estudios);
  
         ?>
         <form class="col-6" action="" method="post">
