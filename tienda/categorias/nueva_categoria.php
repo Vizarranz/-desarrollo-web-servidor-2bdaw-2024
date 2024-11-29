@@ -51,15 +51,16 @@
             else{
                 if($resultado -> num_rows != 0) {
                     $err_categoria = "La categoría $tmp_categoria ya existe.";
-                } else {
-                        //patrón que permite todos los caracteres alfanuméricos y espacios en blanco.
-                        $patron = "/^[a-zA-ZáéíóúÁÉÍÓÚäëïöüÄËÏÖÜñÑ ]{2,30}$/";
-                        if(!preg_match($patron, $tmp_categoria)) {
-                            $err_categoria = "La categoría debe tener máximo 30 caracteres únicamente alfabéticos";
-                        } else {
-                            $categoria = $tmp_categoria;
-                        }
+                } 
+                else {
+                    //patrón que permite todos los caracteres alfanuméricos y espacios en blanco.
+                    $patron = "/^[a-zA-ZáéíóúÁÉÍÓÚäëïöüÄËÏÖÜñÑ ]{2,30}$/";
+                    if(!preg_match($patron, $tmp_categoria)) {
+                        $err_categoria = "La categoría debe tener máximo 30 caracteres únicamente alfabéticos";
+                    } else {
+                        $categoria = $tmp_categoria;
                     }
+                }
             }
 
             if($tmp_descripcion == '') {
