@@ -117,52 +117,36 @@
                     
             }
 
-            /* Categoría */
-            if ($tmp_categoria == "") {
-                $err_categoria = "La categoría es ogligatoria.";
-            } else {
-                if (strlen($tmp_categoria) > 30) {
-                    $err_categoria = "La categoría debe tener un máximo del 30 caracteres.";
-                } else {
-                    $sql = "SELECT * FROM categorias";
-                    $resultado_categoria = $_conexion -> query($sql);
-                    $lista_categorias = [];
-
-                    while ($fila = $resultado_categoria -> fetch_assoc()) {
-                        $lista_categorias[] = $fila['categoria'];
-                    }
-
-                    if (!in_array($tmp_categoria, $lista_categorias)) {
-                        $err_categoria = "La categoría no es válida";
-                    } else {
-                        $categoria = $tmp_categoria;
-                    }
-                }
+            /* Descripción */
+            
+            if ($tmp_descripcion == '') {
+                $err_descripcion = "La descripción es obligatoria.";
             }
-
-
-            /* Validación stock */
-            if (!is_numeric($tmp_stock)) {
-                $err_stock = "El stock debe ser numérico";
-            } else {
-                if ($tmp_stock < 0 || $tmp_stock > 2147483647) {
-                    $err_stock = "El valor debe estar comprendido entre 0 y 2147483647.";
-                } else {
-                    $stock = $tmp_stock;
-                }
-            }
-
-
-            /* Validación descripción */
-            if ($tmp_descripcion == "") {
-                $err_descripcion = "La descripción del producto es obligatoria.";
-            } else {
+            else {
                 if (strlen($tmp_descripcion) > 255) {
-                    $err_descripcion = "La descripción debe tener un máximo del 255 caracteres.";
-                } else {
+                    $err_descripcion = "La descripción debe contener menos de 255";
+                }
+                else {
                     $descripcion = $tmp_descripcion;
                 }
             }
+
+            /* Stock */
+
+            if ($tmp_stock == '') {
+                $stock = 0;
+            }
+            else {
+                if (is_numeric($tmp_stock)) {
+                    if ($tmp_stock < 0 || $tmp_stock > 2147483647) {
+                        $err_stock = "El stock debe estar comprendido entre 0 y 2147483647";
+                    }
+                    else {
+                        $stock = $tmp_stock;
+                    }   
+                }
+            }
+
         }
         
         $sql = "SELECT * FROM categorias ORDER BY categoria";
@@ -204,7 +188,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Stock</label>
-                <input class="form-control" type="number" placeholder="Cantidad del producto" name="stock">
+                <input class="form-control" type="number" placeholder="Cantidad del producto" value=0 name="stock">
                 <?php if(isset($err_stock)) echo "<span class='error'>$err_stock</span>" ?>
             </div>
             <div class="mb-3">
@@ -221,9 +205,9 @@
     <?php
         /* Enviar a la BBDD */
         if (isset($nombre) && isset($precio) && isset($categoria) && isset($ubicacion_final) && isset($descripcion)) {
-            $enviar = "INSERT INTO productos (nombre, precio, categoria, stock, imagen, descripcion) 
+            $sql = "INSERT INTO productos (nombre, precio, categoria, stock, imagen, descripcion) 
                 VALUES ('$nombre', '$precio', '$categoria', '$stock', '$ubicacion_final', '$descripcion')";
-            $_conexion -> query($enviar);
+            $_conexion -> query($sql);
         }
     ?>
 
