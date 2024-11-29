@@ -55,8 +55,9 @@
                     <th>Precio</th>
                     <th>Categoría</th>
                     <th>Stock</th>
-                    <th>Imagen</th>
                     <th>Descripción</th>
+                    <th>Imagen</th>
+                    <th></th>
                     <th></th>
                 </tr>
             </thead>
@@ -68,8 +69,11 @@
                         echo "<td>" . $fila["precio"] . "</td>";
                         echo "<td>" . $fila["categoria"] . "</td>";
                         echo "<td>" . $fila["stock"] . "</td>";
-                        echo "<td>" . $fila["imagen"] . "</td>";
+                        echo "<td>" . $fila["descripcion"] . "</td>";
                         ?>
+                        <td>
+                            <img width="200" height="150" src="<?php echo $fila["imagen"] ?>">
+                        </td>
                         <td>
                             <a class="btn btn-primary" 
                                href="editar_producto.php?id_producto=<?php echo $fila["id_producto"] ?>">Editar</a>
