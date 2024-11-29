@@ -46,8 +46,9 @@
             if (isset($_POST["categoria"])) {
                 $tmp_categoria = depurar($_POST["categoria"]);
             } else {
-                $tmp_categoria = "";
+                $tmp_categoria = '';
             }
+            
             $tmp_stock = depurar($_POST["stock"]);
             $tmp_descripcion = depurar($_POST["descripcion"]);
 
@@ -147,6 +148,19 @@
                 }
             }
 
+            /* Categoría */
+            if($tmp_categoria == "") {
+                $err_categoria = "La categoría es obligatoria";
+            }
+            else{
+                //patrón que permite todos los caracteres alfanuméricos y espacios en blanco.
+                $patron = "/^[a-zA-ZáéíóúÁÉÍÓÚäëïöüÄËÏÖÜñÑ ]{2,30}$/";
+                if(!preg_match($patron, $tmp_categoria)) {
+                    $err_categoria = "La categoría debe tener máximo 30 caracteres únicamente alfabéticos";
+                } else {
+                    $categoria = $tmp_categoria;
+                }
+            }
         }
         
         $sql = "SELECT * FROM categorias ORDER BY categoria";
@@ -170,6 +184,7 @@
                         </option>
                     <?php } ?>
                 </select>
+                <?php if(isset($err_categoria)) echo "<span class='error'>$err_categoria</span>" ?>
             </div>
             <div class="mb-3">
                 <label class="form-label">Nombre</label>
