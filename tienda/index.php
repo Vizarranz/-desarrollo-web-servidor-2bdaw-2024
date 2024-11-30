@@ -10,6 +10,10 @@
         ini_set("display_errors", 1 );    
 
         require('./util/conexion.php');
+        session_start();
+        if (isset($_SESSION["usuario"])) {
+            echo "<h2>Sesión iniciada como " . $_SESSION["usuario"] . "</h2>";
+        }
         
         
     ?>
@@ -22,9 +26,33 @@
 <body>
     <div class="container">
         <h1>Productos</h1>
-        <a class="btn btn-secondary" href="./categorias/index.php">Categorías</a>
+        <!-- <a class="btn btn-secondary" href="./categorias/index.php">Categorías</a>
         <a class="btn btn-secondary" href="./productos/index.php">Productos</a>
-        <a class="btn btn-secondary" href="./usuario/iniciar_sesion.php">Iniciar sesión</a>
+        <a class="btn btn-secondary" href="./usuario/iniciar_sesion.php">Iniciar sesión</a> -->
+        <nav>
+        <ul class="nav nav-underline">
+            <?php
+            if (isset($_SESSION["usuario"])) {
+                echo '<li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="./categorias/index.php">Categorías</a>
+                    </li>';
+                echo '<li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="./productos/index.php">Productos</a>
+                    </li>';
+                echo '<li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="./usuario/cerrar_sesion.php">Cerrar sesión</a>
+                    </li>';
+                echo '<li class="nav-item">
+                    <a class="nav-link" aria-current="page" href="./usuario/cambiar_credenciales.php">Cambiar contraseña</a>
+                    </li>';
+            } else {
+                echo '<li class="nav-item">
+                    <a class="nav-link" href="./usuario/iniciar_sesion.php">Iniciar Sesión</a>
+                    </li>';
+            }
+            ?>
+        </ul>
+        </nav>
         <?php
             if($_SERVER["REQUEST_METHOD"] == "POST") {
                 $id_producto = $_POST["id_producto"];
@@ -43,7 +71,6 @@
              * a los arrays
              */
         ?>
-        <a class="btn btn-secondary" href="nuevo_producto.php">Crear nuevo producto</a><br><br>
         <table class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
@@ -86,7 +113,6 @@
                 ?>
             </tbody>
         </table>
-        <a class="btn btn-secondary" href="../index.php">Volver al inicio</a>
     </div>
 </body>
 </html>
