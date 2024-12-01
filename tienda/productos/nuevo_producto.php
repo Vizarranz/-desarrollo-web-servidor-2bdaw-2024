@@ -78,20 +78,24 @@
             $ubicacion_temporal = $_FILES["imagen"]["tmp_name"];
             $tipo_imagen = $_FILES["imagen"]["type"];
 
-            if (strlen($nombre_imagen) > 60) {
-                $err_imagen = "El nombre de la imagen debe comprender entre 1 y 60 caracteres.";
+            if ($nombre_imagen == '') {
+                $ubicacion_final = "";
             }
             else {
-                $formato_imagen = ["image/webp","image/png","image/jpeg","image/jpg","image/apng","image/svg"];
-                if (!in_array($tipo_imagen,$formato_imagen)) {
-                    $err_imagen = "El formato de imagen no se encuentra entre los soportados.";
+                if (strlen($nombre_imagen) > 60) {
+                    $err_imagen = "El nombre de la imagen debe comprender entre 1 y 60 caracteres.";
                 }
                 else {
-                    $ubicacion_final = "../imagenes/$nombre_imagen";
-                    move_uploaded_file($ubicacion_temporal, $ubicacion_final);
+                    $formato_imagen = ["image/webp","image/png","image/jpeg","image/jpg","image/apng","image/svg"];
+                    if (!in_array($tipo_imagen,$formato_imagen)) {
+                        $err_imagen = "El formato de imagen no se encuentra entre los soportados.";
+                    }
+                    else {
+                        $ubicacion_final = "../imagenes/$nombre_imagen";
+                        move_uploaded_file($ubicacion_temporal, $ubicacion_final);
+                    }
                 }
             }
-
             /* Precio */
 
             if ($tmp_precio == '') {
@@ -133,6 +137,8 @@
             }
 
             /* Stock */
+            /* Maybe hay que hacer que en la parte del stock en el formulario como un campo 
+            de texto en lugar de un numérico. */
 
             if ($tmp_stock == '') {
                 $stock = 0;
@@ -220,6 +226,11 @@
     <?php
         /* Enviar a la BBDD */
         if (isset($nombre) && isset($precio) && isset($categoria) && isset($ubicacion_final) && isset($descripcion)) {
+            $sql = "INSERT INTO productos (nombre, precio, categoria, stock, imagen, descripcion) 
+                VALUES ('$nombre', '$precio', '$categoria', '$stock', '$ubicacion_final', '$descripcion')";
+            $_conexion -> query($sql);
+        }
+        elseif (isset($nombre) && isset($precio) && isset($categoria) && isset($descripcion)) {
             $sql = "INSERT INTO productos (nombre, precio, categoria, stock, imagen, descripcion) 
                 VALUES ('$nombre', '$precio', '$categoria', '$stock', '$ubicacion_final', '$descripcion')";
             $_conexion -> query($sql);

@@ -95,15 +95,16 @@
                         echo "<td>" . $fila["descripcion"] . "</td>";
                         ?>
                         <td>
-                            <img width="200" height="150" src="<?php echo $fila["imagen"] ?>">
+                            <img width="200" height="150" src="./imagenes/<?php echo $fila['imagen'] ?>">
                         </td>
+                        <!-- Los botones de editar y borrar tienen que desaparecer o actualizarse -->
                         <td>
                             <a class="btn btn-primary" 
-                               href="editar_producto.php?id_producto=<?php echo $fila["id_producto"] ?>">Editar</a>
+                               href="editar_producto.php?id_producto=<?php echo $fila['id_producto'] ?>">Editar</a>
                         </td>
                         <td>
                             <form action="" method="post">
-                                <input type="hidden" name="id_producto" value="<?php echo $fila["id_producto"] ?>">
+                                <input type="hidden" name="id_producto" value="<?php echo $fila['id_producto'] ?>">
                                 <input class="btn btn-danger" type="submit" value="Borrar">
                             </form>
                         </td>
