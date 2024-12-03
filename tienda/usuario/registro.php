@@ -23,6 +23,15 @@
     </style>
 </head>
 <body>
+    <?php
+        function depurar(string $entrada) : string {
+            $salida = htmlspecialchars($entrada);
+            $salida = trim($salida);
+            $salida = stripslashes($salida);
+            $salida = preg_replace('!\s+!', ' ', $salida);
+            return $salida;
+        }
+    ?>
     <div class="container">
     <?php
     if($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -62,11 +71,48 @@
             }
         }
         
-        if ($tmp_contrasena) {
-            # code...
+        if ($contrasena_1 == '') {
+            $err_nueva_contrasena = "El campo es obligatorio.";
+        }
+        elseif ($contrasena_2 == '') {
+            $err_nueva_contrasena_2 = "El campo es obligatorio.";
+        }
+        else {
+            if (strlen($contrasena_1) < 8 || strlen($contrasena_1) > 15) {
+                $err_nueva_contrasena = "La contraseña debe comprender entre 8 y 15 caracteres.";
+            }
+            elseif (strlen($contrasena_2) < 8 || strlen($contrasena_2) > 15) {
+                $err_nueva_contrasena_2 = "La contraseña debe comprender entre 8 y 15 caracteres.";
+            }
+            else {
+                $patron = "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,15}$/";
+                if (!preg_match($patron,$contrasena_1)) {
+                    $err_nueva_contrasena = "La contraseña debe contener al menos una minúscula,
+                    una mayúscula y un número.";
+                }
+                elseif (!preg_match($patron,$contrasena_2)) {
+                    $err_nueva_contrasena_2 = "La contraseña debe contener al menos una minúscula,
+                    una mayúscula y un número.";
+                }
+                else {
+                    if (strcmp($contrasena_1,$contrasena_2) != 0) {
+                        $err_nueva_contrasena = "Las contraseñas no coinciden";
+                        $err_nueva_contrasena_2 = "Las contraseñas no coinciden";
+                    }
+                    else {
+                        /* Usar strcmp para comparar que las dos cadenas son iguales, 
+                        y en el caso de que no lo sean devolver un error
+                        printeando por pantalla. */
+                        /* else {
+                            $iguales = strcmp($)
+                        } */
+                        $contrasena_cifrada = password_hash($contrasena_1, PASSWORD_DEFAULT);
+                    }
+                }
+            }
         }
 
-        $contrasena_cifrada = password_hash($tmp_contrasena,PASSWORD_DEFAULT);
+        $contrasena_cifrada = password_hash($contrasena_1,PASSWORD_DEFAULT);
     }
     ?>
         <h1>Registro</h1>
