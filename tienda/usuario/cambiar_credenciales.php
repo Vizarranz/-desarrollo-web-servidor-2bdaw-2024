@@ -135,7 +135,7 @@
             </div>
             <div class="mb-3">
                 <input class="btn btn-primary" type="submit" value="Editar">
-                <a class="btn btn-secondary" href="index.php">Volver</a>
+                <a class="btn btn-secondary" href="../index.php">Volver</a>
             </div>
         </form>
         </form>
