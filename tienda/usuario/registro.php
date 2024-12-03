@@ -27,7 +27,8 @@
     <?php
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         $tmp_usuario = $_POST["usuario"];
-        $tmp_contrasena = $_POST["contrasena"];
+        $contrasena_1 = depurar($_POST["nueva_contrasena"]);
+        $contrasena_2 = depurar($_POST["nueva_contrasena_2"]);
         /*Vas por aquí, ibas a empezar con la validación tanto de usuario como 
         contraseña y lo que tienes ahí abajo tienes que ponerlo con el método isset de
         contrasena_cifrada y usuario, ten en cuenta que empiezas con las variables
@@ -61,6 +62,10 @@
             }
         }
         
+        if ($tmp_contrasena) {
+            # code...
+        }
+
         $contrasena_cifrada = password_hash($tmp_contrasena,PASSWORD_DEFAULT);
     }
     ?>
@@ -73,8 +78,14 @@
                 <?php if(isset($err_usuario)) echo "<span class='error'>$err_usuario</span>" ?>
             </div>
             <div class="mb-3">
-                <label class="form-label">Contraseña</label>
-                <input class="form-control" type="password" name="contrasena">
+                <label for="nueva_contrasena" class="form-label">Contraseña</label>
+                <input class="form-control" type="password"  name="nueva_contrasena">
+                <?php if(isset($err_nueva_contrasena)) echo "<span class='error'>$err_nueva_contrasena</span>" ?>
+            </div>
+            <div class="mb-3">
+                <label for="nueva_contrasena_2" class="form-label">Confirme la nueva contraseña</label><br>
+                <input class="form-control" type="password"  name="nueva_contrasena_2">
+                <?php if(isset($err_nueva_contrasena_2)) echo "<span class='error'>$err_nueva_contrasena_2</span>" ?>
             </div>
             <div class="mb-3">
                 <input class="btn btn-primary" type="submit" value="Registrarse">
