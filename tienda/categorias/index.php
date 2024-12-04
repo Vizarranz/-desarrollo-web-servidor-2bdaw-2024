@@ -33,9 +33,20 @@
             if($_SERVER["REQUEST_METHOD"] == "POST") {
                 $categoria = $_POST["categoria"];
                 /* echo "<h1>$categoria</h1>"; */
-                //  borrar el anime
-                $sql = "DELETE FROM categorias WHERE categoria = '$categoria'";
-                $_conexion -> query($sql);
+                //  Mandamos un mensaje explicando por qué no puede borrar la categoría
+                // en caso de intentar realizar el borrado aún existiendo una categoría
+                // asociada a un producto.
+                $check = "SELECT * from productos where categoria = '$categoria'";
+                $resultado = $_conexion -> query($check);
+
+                if ($resultado -> num_rows > 0) {
+                    $err_borrado = "La categoría tiene productos asociados, por favor bórralos primero
+                    antes de borrar la categoría.";
+                }
+                else {
+                    $sql = "DELETE FROM categorias WHERE categoria = '$categoria'";
+                    $_conexion -> query($sql);
+                }
             }
 
             $sql = "SELECT * FROM categorias";
@@ -47,7 +58,8 @@
              * a los arrays
              */
         ?>
-        <a class="btn btn-secondary" href="nueva_categoria.php">Crear nueva categoría</a><br><br>
+        <a class="btn btn-secondary" href="nueva_categoria.php">Crear nueva categoría</a><br>
+        <?php if(isset($err_borrado)) echo "<h5 class='error'>$err_borrado</h5>" ?>
         <table class="table table-striped table-hover">
             <thead class="table-dark">
                 <tr>
@@ -80,7 +92,7 @@
                 ?>
             </tbody>
         </table>
-        <a class="btn btn-secondary" href="../index.php">Volver al inicio</a>
+        <a class="btn btn-secondary" href="../index.php">Volver al inicio</a><br>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
