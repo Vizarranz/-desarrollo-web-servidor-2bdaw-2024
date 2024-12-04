@@ -10,9 +10,12 @@
         ini_set("display_errors", 1);
         
         require("../util/conexion.php");
+        
         session_start();
-        if (!isset($_SESSION["usuario"])) {
-            header("location: ../index.php");
+        if(isset($_SESSION["usuario"])) {
+            echo "<p class='text-primary text-opacity-50'>Sesión iniciada como: " . $_SESSION["usuario"] . "</p>";
+        }else{
+            header("location: ../usuario/iniciar_sesion.php");
             exit;
         }
     ?>

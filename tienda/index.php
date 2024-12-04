@@ -12,7 +12,7 @@
         require('./util/conexion.php');
         session_start();
         if (isset($_SESSION["usuario"])) {
-            echo "<h2>Sesión iniciada como " . $_SESSION["usuario"] . "</h2>";
+            echo "<p class='text-primary text-opacity-50'>Sesión iniciada como: " . $_SESSION["usuario"] . "</p>";
         }
         
         

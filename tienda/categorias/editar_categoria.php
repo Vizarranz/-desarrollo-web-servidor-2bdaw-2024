@@ -14,7 +14,7 @@
 
         session_start();
         if(isset($_SESSION["usuario"])) {
-            echo "<h2>Bienvenid@ " . $_SESSION["usuario"] . "</h2>";
+            echo "<p class='text-primary text-opacity-50'>Sesión iniciada como: " . $_SESSION["usuario"] . "</p>";
         }else{
             header("location: ../usuario/iniciar_sesion.php");
             exit;
