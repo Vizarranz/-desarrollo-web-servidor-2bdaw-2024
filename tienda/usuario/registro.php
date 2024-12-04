@@ -36,8 +36,8 @@
     <?php
     if($_SERVER["REQUEST_METHOD"] == "POST") {
         $tmp_usuario = $_POST["usuario"];
-        $contrasena_1 = depurar($_POST["nueva_contrasena"]);
-        $contrasena_2 = depurar($_POST["nueva_contrasena_2"]);
+        $tmp_contrasena_1 = depurar($_POST["nueva_contrasena"]);
+        $tmp_contrasena_2 = depurar($_POST["nueva_contrasena_2"]);
         /*Vas por aquí, ibas a empezar con la validación tanto de usuario como 
         contraseña y lo que tienes ahí abajo tienes que ponerlo con el método isset de
         contrasena_cifrada y usuario, ten en cuenta que empiezas con las variables
@@ -70,32 +70,32 @@
                 }
             }
         }
-        
-        if ($contrasena_1 == '') {
+
+        if ($tmp_contrasena_1 == '') {
             $err_nueva_contrasena = "El campo es obligatorio.";
         }
-        elseif ($contrasena_2 == '') {
+        elseif ($tmp_contrasena_2 == '') {
             $err_nueva_contrasena_2 = "El campo es obligatorio.";
         }
         else {
-            if (strlen($contrasena_1) < 8 || strlen($contrasena_1) > 15) {
+            if (strlen($tmp_contrasena_1) < 8 || strlen($tmp_contrasena_1) > 15) {
                 $err_nueva_contrasena = "La contraseña debe comprender entre 8 y 15 caracteres.";
             }
-            elseif (strlen($contrasena_2) < 8 || strlen($contrasena_2) > 15) {
+            elseif (strlen($tmp_contrasena_2) < 8 || strlen($tmp_contrasena_2) > 15) {
                 $err_nueva_contrasena_2 = "La contraseña debe comprender entre 8 y 15 caracteres.";
             }
             else {
                 $patron = "/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,15}$/";
-                if (!preg_match($patron,$contrasena_1)) {
+                if (!preg_match($patron,$tmp_contrasena_1)) {
                     $err_nueva_contrasena = "La contraseña debe contener al menos una minúscula,
                     una mayúscula y un número.";
                 }
-                elseif (!preg_match($patron,$contrasena_2)) {
+                elseif (!preg_match($patron,$tmp_contrasena_2)) {
                     $err_nueva_contrasena_2 = "La contraseña debe contener al menos una minúscula,
                     una mayúscula y un número.";
                 }
                 else {
-                    if (strcmp($contrasena_1,$contrasena_2) != 0) {
+                    if (strcmp($tmp_contrasena_1,$tmp_contrasena_2) != 0) {
                         $err_nueva_contrasena = "Las contraseñas no coinciden";
                         $err_nueva_contrasena_2 = "Las contraseñas no coinciden";
                     }
@@ -106,13 +106,12 @@
                         /* else {
                             $iguales = strcmp($)
                         } */
-                        $contrasena_cifrada = password_hash($contrasena_1, PASSWORD_DEFAULT);
+                        $contrasena_correcta = $tmp_contrasena_2;
+                        $contrasena_cifrada = password_hash($contrasena_correcta, PASSWORD_DEFAULT);
                     }
                 }
             }
         }
-
-        $contrasena_cifrada = password_hash($contrasena_1,PASSWORD_DEFAULT);
     }
     ?>
         <h1>Registro</h1>

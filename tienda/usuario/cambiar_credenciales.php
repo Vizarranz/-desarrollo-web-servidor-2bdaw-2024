@@ -65,7 +65,7 @@
 
             $acceso_concedido = password_verify($tmp_contrasena, $contrasena);
             if (!$acceso_concedido) {
-                $err_contrasena = "Contraseña es incorrecta";
+                $err_contrasena = "La contraseña es incorrecta";
             }
             else {
                 if ($contrasena_1 == '') {
