@@ -226,7 +226,7 @@
             </div>
             <div class="mb-3">
                 <label for="descripcion" class="form-label">Descripción</label><br>
-                <textarea name="descripcion" id="descripcion"><?php echo $descripcion ?></textarea>
+                <textarea name="descripcion" id="descripcion"><?php echo $descripcion ?></textarea><br>
                 <?php if(isset($err_descripcion)) echo "<span class='error'>$err_descripcion</span>" ?>
             </div>
             <div class="mb-3">

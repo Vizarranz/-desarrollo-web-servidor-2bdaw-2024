@@ -42,6 +42,15 @@
     <div class="container">
         <h1 class="mb-4">Nuevo producto</h1>
         <?php
+
+            $sql = "SELECT * FROM categorias ORDER BY categoria";
+            $resultado = $_conexion -> query($sql);
+            $categorias = [];
+
+            while ($fila = $resultado -> fetch_assoc()) {
+                array_push($categorias, $fila["categoria"]);
+            }
+
         if($_SERVER["REQUEST_METHOD"] == "POST") {
             $tmp_nombre = depurar($_POST["nombre"]);
             $tmp_precio = depurar($_POST["precio"]);
@@ -65,7 +74,7 @@
                     $err_nombre = "El nombre debe contener entre 2 y 50 caracteres.";
                 }
                 else {
-                    $patron = "/^[a-zA-Z0-9 ]+/";
+                    $patron = "/^[a-zA-Z0-9 ]+$/";
                     if (!preg_match($patron, $tmp_nombre)) {
                         $err_nombre = "El nombre sólo puede constar de caracteres alfanuméricos y espacios en blanco.";
                     }
@@ -157,7 +166,7 @@
             }
 
             /* Categoría */
-            if($tmp_categoria == "") {
+            if($tmp_categoria == '') {
                 $err_categoria = "La categoría es obligatoria";
             }
             else{
@@ -165,9 +174,14 @@
                 $patron = "/^[a-zA-ZáéíóúÁÉÍÓÚäëïöüÄËÏÖÜñÑ ]{2,30}$/";
                 if(!preg_match($patron, $tmp_categoria)) {
                     $err_categoria = "La categoría debe tener máximo 30 caracteres únicamente alfabéticos";
-                } else {
+                } 
+                elseif (!in_array($tmp_categoria, $categorias)) {
+                    $err_categoria = "La categoría no se encuentra en la base de datos";
+                }
+                else {
                     $categoria = $tmp_categoria;
                 }
+                
             }
         }
         
@@ -206,7 +220,7 @@
             </div>
             <div class="mb-3">
                 <label for="descripcion" class="form-label">Descripción</label><br>
-                <textarea name="descripcion" id="descripcion" placeholder="En qué consiste el producto"></textarea>
+                <textarea name="descripcion" id="descripcion" placeholder="En qué consiste el producto"></textarea><br>
                 <?php if(isset($err_descripcion)) echo "<span class='error'>$err_descripcion</span>" ?>
             </div>
             <div class="mb-3">
