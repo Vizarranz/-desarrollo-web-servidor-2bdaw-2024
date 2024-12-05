@@ -56,6 +56,14 @@
                 $imagen = $fila["imagen"];
             }
 
+            $sql = "SELECT * FROM categorias ORDER BY categoria";
+            $resultado = $_conexion -> query($sql);
+            $categorias = [];
+
+            while ($fila = $resultado -> fetch_assoc()) {
+                array_push($categorias, $fila["categoria"]);
+            }
+
             if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $tmp_categoria = depurar($_POST["categoria"]);
                 $tmp_nombre = depurar($_POST["nombre"]);
@@ -75,7 +83,7 @@
                         $err_nombre = "El nombre debe contener entre 2 y 50 caracteres.";
                     }
                     else {
-                        $patron = "/^[a-zA-Z0-9 ]+/";
+                        $patron = "/^[a-zA-Z0-9 ]+$/";
                         if (!preg_match($patron, $tmp_nombre)) {
                             $err_nombre = "El nombre sólo puede constar de caracteres alfanuméricos y espacios en blanco.";
                         }
@@ -94,7 +102,11 @@
                     $patron = "/^[a-zA-ZáéíóúÁÉÍÓÚäëïöüÄËÏÖÜñÑ ]{2,30}$/";
                     if(!preg_match($patron, $tmp_categoria)) {
                         $err_categoria = "La categoría debe tener máximo 30 caracteres únicamente alfabéticos";
-                    } else {
+                    } 
+                    elseif (!in_array($tmp_categoria, $categorias)) {
+                        $err_categoria = "La categoría no se encuentra en la base de datos";
+                    }
+                    else {
                         $categoria = $tmp_categoria;
                     }
                     
@@ -200,6 +212,7 @@
                     <?php } ?>
                     
                 </select>
+                <?php if(isset($err_categoria)) echo "<span class='error'>$err_categoria</span>" ?>
             </div>
             <div class="mb-3">
                 <label class="form-label">Nombre</label>
