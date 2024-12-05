@@ -53,18 +53,7 @@
         //echo "<h1>$titulo</h1>";
 
         if($_SERVER["REQUEST_METHOD"] == "POST") {
-            $tmp_categoria = depurar($_POST["categoria"]);
             $tmp_descripcion = depurar($_POST["descripcion"]);
-
-            if($tmp_categoria == '') {
-                $err_categoria = "La categoría es obligatoria";
-            } else {
-                if(strlen($tmp_categoria) > 30) {
-                    $err_categoria = "La categoría debe tener máximo 30 caracteres";
-                } else {
-                    $categoria = $tmp_categoria;
-                }
-            }
 
             if($tmp_descripcion == '') {
                 $err_descripcion = "La descripción es obligatoria";
@@ -85,7 +74,7 @@
             </div>
             <div class="mb-3">
                 <label for="descripcion" class="form-label">Descripción</label><br>
-                <textarea name="descripcion" id="descripcion"><?php echo $descripcion ?></textarea>
+                <textarea name="descripcion" id="descripcion"><?php echo $descripcion ?></textarea><br>
                 <?php if(isset($err_descripcion)) echo "<span class='error'>$err_descripcion</span>" ?>
             </div>
             <div class="mb-3">

@@ -68,8 +68,7 @@
                 $descripcion = $tmp_descripcion;
             } else {
                 //patrón que permite todos los caracteres entre 0 y 255 caracteres.
-                $patron = "/^.{0,255}$/";
-                if(!preg_match($patron, $tmp_categoria)) {
+                if(strlen($tmp_descripcion) > 255) {
                     $err_descripcion = "La descripción debe tener máximo 255 caracteres";
                 } else {
                     $descripcion = $tmp_descripcion;
@@ -94,7 +93,7 @@
             </div>
             <div class="mb-3">
                 <label for="descripcion" class="form-label">Descripción</label><br>
-                <textarea name="descripcion" id="descripcion" placeholder="Cosas que hacen chispas..."></textarea>
+                <textarea name="descripcion" id="descripcion" placeholder="Cosas que hacen chispas..."></textarea><br>
                 <?php if(isset($err_descripcion)) echo "<span class='error'>$err_descripcion</span>" ?>
             </div>
             <div class="mb-3">
