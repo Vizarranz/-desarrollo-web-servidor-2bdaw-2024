@@ -43,14 +43,6 @@
         <h1 class="mb-4">Nuevo producto</h1>
         <?php
 
-            $sql = "SELECT * FROM categorias ORDER BY categoria";
-            $resultado = $_conexion -> query($sql);
-            $categorias = [];
-
-            while ($fila = $resultado -> fetch_assoc()) {
-                array_push($categorias, $fila["categoria"]);
-            }
-
         if($_SERVER["REQUEST_METHOD"] == "POST") {
             $tmp_nombre = depurar($_POST["nombre"]);
             $tmp_precio = depurar($_POST["precio"]);
@@ -62,6 +54,14 @@
             
             $tmp_stock = depurar($_POST["stock"]);
             $tmp_descripcion = depurar($_POST["descripcion"]);
+
+            $sql = "SELECT * FROM categorias ORDER BY categoria";
+            $resultado = $_conexion -> query($sql);
+            $categorias = [];
+
+            while ($fila = $resultado -> fetch_assoc()) {
+                array_push($categorias, $fila["categoria"]);
+            }
 
             /* Validaciones */
 
@@ -181,7 +181,7 @@
                 //patrón que permite todos los caracteres alfanuméricos y espacios en blanco.
                 $patron = "/^[a-zA-ZáéíóúÁÉÍÓÚäëïöüÄËÏÖÜñÑ ]{2,30}$/";
                 if(!preg_match($patron, $tmp_categoria)) {
-                    $err_categoria = "La categoría debe tener máximo 30 caracteres únicamente alfabéticos";
+                    $err_categoria = "La categoría debe comprender entre 2 y 30 caracteres únicamente alfabéticos";
                 } 
                 elseif (!in_array($tmp_categoria, $categorias)) {
                     $err_categoria = "La categoría no se encuentra en la base de datos";
@@ -202,6 +202,20 @@
         }
 
         ?>
+
+<?php
+        /* Enviar a la BBDD */
+        if (isset($nombre) && isset($precio) && isset($categoria) && isset($stock) && isset($ubicacion_final) && isset($descripcion)) {
+            $sql = "INSERT INTO productos (nombre, precio, categoria, stock, imagen, descripcion) 
+                VALUES ('$nombre', '$precio', '$categoria', '$stock', '$ubicacion_final', '$descripcion')";
+            $_conexion -> query($sql);
+        }
+        elseif (isset($nombre) && isset($precio) && isset($categoria) && isset($stock) && isset($descripcion)) {
+            $sql = "INSERT INTO productos (nombre, precio, categoria, stock, imagen, descripcion) 
+                VALUES ('$nombre', '$precio', '$categoria', '$stock', '$ubicacion_final', '$descripcion')";
+            $_conexion -> query($sql);
+        }
+    ?>
         <form class="col-6" action="" method="post" enctype="multipart/form-data">
             <div class="mb-3">
                 <label class="form-label">Categoría</label>
@@ -247,19 +261,7 @@
         </form>
     </div>
 
-    <?php
-        /* Enviar a la BBDD */
-        if (isset($nombre) && isset($precio) && isset($categoria) && isset($stock) && isset($ubicacion_final) && isset($descripcion)) {
-            $sql = "INSERT INTO productos (nombre, precio, categoria, stock, imagen, descripcion) 
-                VALUES ('$nombre', '$precio', '$categoria', '$stock', '$ubicacion_final', '$descripcion')";
-            $_conexion -> query($sql);
-        }
-        elseif (isset($nombre) && isset($precio) && isset($categoria) && isset($stock) && isset($descripcion)) {
-            $sql = "INSERT INTO productos (nombre, precio, categoria, stock, imagen, descripcion) 
-                VALUES ('$nombre', '$precio', '$categoria', '$stock', '$ubicacion_final', '$descripcion')";
-            $_conexion -> query($sql);
-        }
-    ?>
+    
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
