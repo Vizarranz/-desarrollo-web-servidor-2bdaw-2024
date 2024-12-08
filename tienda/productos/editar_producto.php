@@ -187,8 +187,6 @@
                         else {
                             if (filter_var($tmp_stock,FILTER_VALIDATE_INT) === false) {
                                 $err_stock = "El número debe ser un entero";
-                                var_dump($tmp_stock);
-                                echo $tmp_stock;
                             }
                             else {
                                 $stock = $tmp_stock; 
