@@ -163,8 +163,10 @@
                         $err_stock = "El stock debe estar comprendido entre 0 y 2147483647";
                     }
                     else {
-                        if (!filter_var($tmp_stock,FILTER_VALIDATE_INT)) {
+                        if (filter_var($tmp_stock,FILTER_VALIDATE_INT) === false) {
                             $err_stock = "El número debe ser un entero";
+                            var_dump($tmp_stock);
+                            echo $tmp_stock;
                         }
                         else {
                             $stock = $tmp_stock; 
@@ -233,7 +235,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Stock</label>
-                <input class="form-control" type="text" placeholder="Cantidad del producto" value=0 name="stock">
+                <input class="form-control" type="text" placeholder="Cantidad del producto" name="stock">
                 <?php if(isset($err_stock)) echo "<span class='error'>$err_stock</span>" ?>
             </div>
             <div class="mb-3">
@@ -249,12 +251,12 @@
 
     <?php
         /* Enviar a la BBDD */
-        if (isset($nombre) && isset($precio) && isset($categoria) && isset($ubicacion_final) && isset($descripcion)) {
+        if (isset($nombre) && isset($precio) && isset($categoria) && isset($stock) && isset($ubicacion_final) && isset($descripcion)) {
             $sql = "INSERT INTO productos (nombre, precio, categoria, stock, imagen, descripcion) 
                 VALUES ('$nombre', '$precio', '$categoria', '$stock', '$ubicacion_final', '$descripcion')";
             $_conexion -> query($sql);
         }
-        elseif (isset($nombre) && isset($precio) && isset($categoria) && isset($descripcion)) {
+        elseif (isset($nombre) && isset($precio) && isset($categoria) && isset($stock) && isset($descripcion)) {
             $sql = "INSERT INTO productos (nombre, precio, categoria, stock, imagen, descripcion) 
                 VALUES ('$nombre', '$precio', '$categoria', '$stock', '$ubicacion_final', '$descripcion')";
             $_conexion -> query($sql);
