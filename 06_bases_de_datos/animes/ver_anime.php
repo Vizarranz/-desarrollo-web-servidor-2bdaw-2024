@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nuevo anime</title>
+    <title>Editar anime</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <?php
         error_reporting( E_ALL );
@@ -27,8 +27,22 @@
         //echo "<h1>" . $_GET["id_anime"] . "</h1>";
 
         $id_anime = $_GET["id_anime"];
+        /*
         $sql = "SELECT * FROM animes WHERE id_anime = $id_anime";
         $resultado = $_conexion -> query($sql);
+        */
+
+        #1. Prepare
+        $sql = $_conexion -> prepare("SELECT * FROM animes WHERE id_anime = ?");
+
+        #2. Binding
+        $sql -> bind_param("i",$id_anime);
+
+        #3. Execute
+        $sql -> execute();
+
+        #4. Retrieve
+        $resultado = $sql -> get_result();
         
         while($fila = $resultado -> fetch_assoc()) {
             $titulo = $fila["titulo"];
