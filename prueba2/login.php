@@ -3,7 +3,6 @@ session_start();
 include 'config.php';
 include 'common_header.php';
 show_header('Login');
-show_header();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST["username"]);

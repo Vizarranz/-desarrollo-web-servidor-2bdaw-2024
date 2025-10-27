@@ -2,9 +2,7 @@
 include 'config.php';
 include 'common_header.php';
 show_header('Sign up');
-show_header();
 
-// Form processing
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = trim($_POST["username"]);
     $email = filter_var(trim($_POST["email"]), FILTER_VALIDATE_EMAIL);
